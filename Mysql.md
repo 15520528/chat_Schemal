@@ -37,5 +37,11 @@ Công cụ cơ sở dữ liệu được nhóm lại này đặc biệt phù h�
 #### 3. Data type
 
 #### 4. Transaction
+<b>Định nghĩa: </b>Transaction là một tiến trình xử lý có xác định điểm đầu và điểm cuối, được chia nhỏ thành các operation (phép thực thi) , tiến trình được thực thi một cách tuần tự và độc lập các operation đó theo nguyên tắc hoặc tất cả đều thành công hoặc một operation thất bại thì toàn bộ tiến trình thất bại. Nếu việc thực thi một operation nào đó bị fail (hỏng) đồng nghĩa với việc dữ liệu phải rollback (trở lại) trạng thái ban đầu.
+
+<b>ACID properties trong transaction</b>
+
+<b>Atomicity :</b> mọi giao dịch chỉ thành công khi tất cả các phần thành công - All or Nothings.
+<b>Isolation :</b> các giao dịch thực thi một cách độc lập với nhau.
 
 #### 5. Connector
