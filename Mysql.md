@@ -67,26 +67,241 @@ Các bảng của nó thực sự là các tập tin văn bản với các giá 
 Các bảng nhỏ gọn, không biểu hiện này được dùng để lưu trữ và truy xuất số lượng lớn các thông tin kiểm tra lịch sử, lưu trữ, hoặc kiểm tra an toàn.
 
 <b>Ưu điểm:</b>
++ Hỗ trợ insert, select, replace
++ Hỗ trợ auto_increment
 
 <b>Nhược điểm:</b>
++ Không hỗ trợ delete, update.
++ Không đánh chỉ mục.
 
-##### 1.6 NDB
-Công cụ cơ sở dữ liệu được nhóm lại này đặc biệt phù hợp với các ứng dụng đòi hỏi thời gian hoạt động và tính khả dụng cao nhất có thể.
+## 2. Installation
+##### 2.1 Cài đặt MySQL server 5.7 trên Ubuntu
+<b>Step 1: Step 1: Install MySQL</b>
+```
+$ sudo apt-get update
+$ sudo apt-get install mysql-server
+```
 
-<b>Ưu điểm:</b>
+<b>Step 2: Verify the MySQL Installation</b>
+```
+$ dpkg --get-selections | grep mysql
+mysql-client-5.7       install
+mysql-client-core-5.7  install
+mysql-common           install
+mysql-server           install
+mysql-server-5.7       install
+mysql-server-core-5.7  install
+```
+<b>Step 3:  Start/Shutdown MySQL Server (mysqld)</b>
 
-<b>Nhược điểm:</b>
+Đăng nhập vào system
+```
+mysql -u root -p
+```
+##### 2.2 Tạo Databases, tables
 
-### 2. Installation
+<b>Tạo một datase</b>
+```
+create database if not exists studentdb;
+```
 
-### 3. Data type
+<b>Liệt kê database có sẵn trong một user</b>
+```
+show databases
+```
 
-### 4. Transaction
-<b>Định nghĩa: </b>Transaction là một tiến trình xử lý có xác định điểm đầu và điểm cuối, được chia nhỏ thành các operation (phép thực thi) , tiến trình được thực thi một cách tuần tự và độc lập các operation đó theo nguyên tắc hoặc tất cả đều thành công hoặc một operation thất bại thì toàn bộ tiến trình thất bại. Nếu việc thực thi một operation nào đó bị fail (hỏng) đồng nghĩa với việc dữ liệu phải rollback (trở lại) trạng thái ban đầu.
+<b>Ngoài cách sử dụng command để giao tiếp với MYSQL, sử dụng giao diện trực quan MYSQL WORKBENH</b>
+![workbench](./images/workbenh.png)
 
-<b>ACID properties trong transaction</b>
+
+<b>Sử dụng một database</b>
+```
+mysql> use studentdb;
+```
+<b>Tạo một table</b>
+```
+mysql> create table class101 (id int, name varchar(50), gpa float);
+```
+<b>Hiển thị các tables</b>
+```
+mysql>show tables;
++---------------------+
+| Tables_in_studentdb |
++---------------------+
+| class101            |
++---------------------+
+```
+
+<b>Xem mô tả một bảng</b>
+
+```
+mysql> describe class101;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(11)     | YES  |     | NULL    |       |
+| name  | varchar(50) | YES  |     | NULL    |       |
+| gpa   | float       | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+```
+
+<b>Insert vào một table</b>
+```
+insert into class101 values (22, 'Mohamed Ali', 4.9);
+insert into class101 values (11, 'Tan Ah Teck', 4.8);
+```
+
+```
+select * from class101;
++----+-------------+------+
+| id | name        | gpa  |
++----+-------------+------+
+| 11 | Tan Ah Teck |  4.8 |
+| 22 | Mohamed Ali |  4.9 |
++----+-------------+------+
+```
+
+<b>Update một table</b>
+```
+update class101 set gpa = 4.4 where name = 'Tan Ah Teck';
+```
+```
+select * from class101;
++----+-------------+------+
+| id | name        | gpa  |
++----+-------------+------+
+| 11 | Tan Ah Teck |  4.8 |
+| 22 | Mohamed Ali |  4.9 |
++----+-------------+------+
+```
+
+## 3. Data type
+
+
+## 4. Transaction
+#### 4.1 Định nghĩa: 
+Transaction là một tiến trình xử lý có xác định điểm đầu và điểm cuối, được chia nhỏ thành các operation (phép thực thi) , tiến trình được thực thi một cách tuần tự và độc lập các operation đó theo nguyên tắc hoặc tất cả đều thành công hoặc một operation thất bại thì toàn bộ tiến trình thất bại. Nếu việc thực thi một operation nào đó bị fail (hỏng) đồng nghĩa với việc dữ liệu phải rollback (trở lại) trạng thái ban đầu.
+
+#### <b>ACID properties trong transaction</b>
 
 <b>Atomicity :</b> mọi giao dịch chỉ thành công khi tất cả các phần thành công - All or Nothings.
+
+<b>Consistency :</b> Đảm bảo tất cả các thao tác trên cơ sở dữ liệu được thay đổi sau khi giao dịch thành công và không xảy ra lỗi.
+
 <b>Isolation :</b> các giao dịch thực thi một cách độc lập với nhau.
+
+<b>Durability :</b> transaction cập nhật dữ liệu thành công (commit success) thì phải đảm bảo khi xảy ra sự cố database bị crash, restart lại hệ thống thì dữ liệu vẫn được giữ ở phiên bản mới nhất.
+
+#### 4.2 Tại sao phải sử dụng transaction
+Sử dụng transaction đảm bảo dữ liệu nhất quá.
+
+### 4.3 Cách sử dụng transaction
+<b>START TRANSACTION, COMMIT, and ROLLBACK Syntax</b>
+```
+START TRANSACTION
+    [transaction_characteristic [, transaction_characteristic] ...]
+
+transaction_characteristic: {
+    WITH CONSISTENT SNAPSHOT
+  | READ WRITE
+  | READ ONLY
+}
+
+BEGIN [WORK]
+COMMIT [WORK] [AND [NO] CHAIN] [[NO] RELEASE]
+ROLLBACK [WORK] [AND [NO] CHAIN] [[NO] RELEASE]
+SET autocommit = {0 | 1}
+```
+
++ Bắt đầu một transaction `START TRANSACTION` or `BEGIN`.
++ `COMMIT` Lệnh COMMIT là lệnh điều khiển transaction được sử dụng để lưu các thay đổi đã được triệu hồi bởi một transaction tới Database.
+
++ `ROLLBACK` là lệnh điều khiển transaction được sử dụng để trao trả transaction về trạng thái trước khi có các thay đổi mà chưa được lưu tới Database.
+
++ `SET autocommit` thay đổi chế độ autocommit, mặc định trong MYSQL `autocommit` là enable, tức là khi thực hiện một transaction MYSQL sẽ lưu thay đổi mãi mãi và không thể  `ROLLBACL`.
+
+Với `START TRANSACTION` autocommit là `disabled` tới cuối transaction với lệnh `COMMIT` hoặc `ROLLBACK`. sau đó `autocommit` sẽ được revert sang trạng thái trước đó.
+
+Ví dụ với `COMMIT`:
+```
+START TRANSACTION;
+Select * from class101;
+UPDATE class101 SET gpa = gpa + 1.0 WHERE name = 'Mohamed Ali';
+Select * from class101;
+commit;
+rollback;
+
+```
+Ví dụ với `ROLLBACK`
+```
+START TRANSACTION;
+Select * from class101;
+UPDATE class101 SET gpa = gpa + 1.0 WHERE name = 'Mohamed Ali';
+rollback;
+Select * from class101;
+```
+Trước transaction
+```
++------+-------------+------+
+| id   | name        | gpa  |
++------+-------------+------+
+|   22 | Mohamed Ali |  8.9 |
+| NULL | Peter Jones | 4.55 |
++------+-------------+------+
+
+```
+Sau khi thực hiện transaction
+```
++------+-------------+------+
+| id   | name        | gpa  |
++------+-------------+------+
+|   22 | Mohamed Ali |  8.9 |
+| NULL | Peter Jones | 4.55 |
++------+-------------+------+
+
+```
+<b>SAVEPOINT trong SQL</b>
+Một SAVEPOINT là một điểm (point) trong một transaction khi bạn có thể lùi transaction về một điểm cụ thể mà không cần lùi transaction về trạng thái đầu trước khi có thay đổi đó.
+```
+SAVEPOINT TEN_CUA_SAVEPOINT;
+
+ROLLBACK TO TEN_CUA_SAVEPOINT;
+```
+
+<b>RELEASE SAVEPOINT trong SQL</b>
+Lệnh RELEASE SAVEPOINT được sử dụng để xóa một SAVEPOINT mà bạn đã tạo.
+```
+RELEASE SAVEPOINT TEN_CUA_SAVEPOINT;
+```
+
+<b>LOCK TABLES and UNLOCK TABLES Syntax</b>
+
+một lock là một flag liên kết với bảng, MYSQL cho phép một phiên client nắm giữ một table lock và ngăn chặn các phiên khác truy cập vào một bảng.
+
+<b>READ LOCK</b> 
++ một phiên làm việc với table chỉ có thể đọc không thể thay đổi trên table đó.
++ Nhiều session có thể đọc trên một table cùng lúc
+```
+lock table class101 read;
+UPDATE class101 SET gpa = gpa + 1.0 WHERE name = 'Mohamed Ali';
+```
+lúc này lỗi sẽ xuất hiện do table bị read lock, mọi thay đổi trên bảng đều không thực thi.
+```
+Error Code: 1099. Table 'class101' was locked with a READ lock and can't be updated	0,00022 sec
+
+```
+
+<b>WRITE LOCK</b> 
++ một phiên làm việc giữ lock có thể read và write trên table.
++ Chỉ có một session thao tác với một table tại một thời điểm.
+
+<b>UNLOCK TABLES</b>
+Sử dụng UNLOCK TABLESunlock (mở khóa) bất kỳ bảng nào bị khóa ở session hiện tại.
+```
+lock table class101 read;
+unlock tables;
+UPDATE class101 SET gpa = gpa + 1.0 WHERE name = 'Mohamed Ali';
+Select * from class101;
+```
 
 #### 5. Connector
