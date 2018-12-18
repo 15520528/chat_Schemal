@@ -396,15 +396,21 @@ Mức isolation này đảm bảo các lệnh đọc trong cùng một transacti
 
 #### 6.1 Sử dụng JDBC
 JDBC (Java Database Connectivity) là một API tiêu chuẩn dùng để tương tác với các loại cơ sở dữ liệu quan hệ. JDBC có một tập hợp các class và các Interface dùng cho ứng dụng Java có thể nói chuyện với các cơ sở dữ liệu.
+
 ![img](./images/jdbcs.png)
+
 <b>DriverManager </b>:
 Là một class, nó dùng để quản lý danh sách các Driver (database drivers). 
+
 <b>Driver </b>:
 Là một Interface, nó dùng để liên kết các liên lạc với cơ sở dữ liệu, điều khiển các liên lạc với database. Một khi Driver được tải lên, lập trình viên không cần phải gọi nó một cách cụ thể.
+
 <b>Connection </b>:
 Là một Interface với tất cả các method cho việc liên lạc với database. Nó mô tả nội dung liên lạc. tất cả các thông tin liên lạc với cơ sở dữ liệu là thông qua chỉ có đối tượng Connection.
+
 <b>Statement </b>:
 Là một Interface, gói gọn một câu lệnh SQL gửi tới cơ sở dữ liệu được phân tích, tổng hợp, lập kế hoạch và thực hiện.
+
 <b>ResultSet </b>:
 ResultSet đại diện cho tập hợp các bản ghi lấy do thực hiện truy vấn.
 
