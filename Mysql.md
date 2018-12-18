@@ -303,5 +303,104 @@ unlock tables;
 UPDATE class101 SET gpa = gpa + 1.0 WHERE name = 'Mohamed Ali';
 Select * from class101;
 ```
+#### 5. Isolation
 
-#### 5. Connector
+##### 5.1 Định nghĩa
+Isolation level là một thuộc tính của transaction, qui định mức độ cô lập của dữ liệu mà transaction có thể truy nhập vào khi dữ liệu đó đang được cập bởi một transaction khác. Khi một transaction cập nhật dữ liệu đang diễn ra, một phần dữ liệu sẽ bị thay đổi (ví dụ một số bản ghi của bảng được sửa đổi hoặc bị xóa bỏ, một số được thêm mới), vậy các transaction hoặc truy vấn khác xảy ra đồng thời và cùng tác động vào các bản ghi đó sẽ diễn ra thế nào? Chúng sẽ phải đợi đến khi transaction đầu hoàn thành hay có thể thực hiện song song, kết quả dữ liệu nhận được là trong khi hay sau khi cập nhật? Bạn có thể điều khiển những hành vi này thông qua việc đặt isolation level của từng transaction. SQL Server cung cấp các mức isolation level sau xếp theo thứ tự tăng dần của mức độ cô lập của dữ liệu: Read Uncommitted, Read Commited, Repeatable Read, và Serializable. Từ bản 2005 bắt đầu bổ sung thêm một loại mới là Snapshot. Phần còn lại của bài này sẽ đi vào chi tiết của từng loại.
+
+<b>Dirty reads</b> xảy ra khi transaction A tiến hành phép write với dữ liệu, transaction B tiến hành đọc dữ liệu sau khi A làm xong phép write. Tuy nhiên vì một lý do gì đó, transaction A không commit được, do đó sự thay đổi phép write không được chấp nhận, dữ liệu rollback lại trạng thái ban đầu, khi đó dữ liệu của B sẽ trở thành dirty – bẩn.
+
+<b>Nonrepeatable reads</b> xảy ra khi transaction A tiến hành phép read trên dữ liệu, sau đó transaction B thực hiện phép write làm dữ liệu thay đổi, lần kế tiếp A lại tiến hành phép read với chính dữ liệu. Như vậy, 2 lần đọc của A thấy dữ liệu không nhất quán (consistency) trên cùng một bản ghi.
+
+<b>Phantom reads</b> là rủi ro xảy ra với lệnh read có điều kiện (chẳng hạn mệnh đề where trong sql). Transaction A đọc được một số X dữ liệu thỏa mãn điều kiện 1, transaction B tiến hành phép write sinh ra một lượng Y dữ liệu thỏa mãn điều kiện , A tính toán lại với điều kiện 1 thấy bổ sung thêm một lượng Y dữ và tổng dữ liệu giữa 2 lần trở lên không đồng nhất.
+
+##### 5.2 Read Uncommitted
+Một transaction lấy dữ liệu từ một transaction khác ngay cả khi transaction đó chưa được commit. Xét ví dụ cụ thể như sau:
+
+quert 1
+```
+START TRANSACTION;
+    UPDATE `users` SET `point`= 100;
+    SELECT SLEEP(30);
+ROLLBACK;
+```
+
+query 1
+```
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SELECT * FROM `users`;
+COMMIT;
+```
+
+Giả sử sau khi tiến hành câu Query 1 ta tiến hành chạy câu Query 2 thì kết quả trả về sẽ là 'point' = 100. Nhưng ngay sau khi câu Query 1 chạy xong và bị rollback thì kết quả trả về thực tế sẽ là là 'point' = 1. Như vậy transaction thứ 2 lấy kết quả chưa được commit của transaction thứ 1 => Hiện tượng trên gọi còn được gọi là <b>Dirty Read.</b> Ưu điểm ở đây là các transaction sẽ chạy liên tục và transaction sau ghi đè lên Transaction trước (Dirty Write).
+
+##### 5.3 Read Committed
+Đây là level default của một transaction nếu như chúng ta không config gì thêm. Tại level này thì Transaction sẽ không thể đọc dữ liệu từ từ một Transaction đang trong quá trình cập nhật hay sửa đổi mà phải đợi transacction đó hoàn tất. Như vậy thì chúng ta có thể tránh được Dirty Read và Dirty Write nhưng các Transaction sẽ phải chờ nhau => Perfoman hệ thống thấp. Ta thực hiện câu Query 1 như sau:
+
+ví dụ:
+
+query 1
+```
+START TRANSACTION;
+    UPDATE `users` SET `point`= 100 WHERE 'id' > 0;
+    SELECT SLEEP(30);
+COMMIT;
+```
+query 2
+```
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+SELECT * FROM users
+WHERE id>2
+```
+query 2 sẽ phải đợi cho đến khi query 1 thực hiện xong.
+
+#### 5.4 Repeatable read
+Giống như mức độ của Read Committed, tại mức độ này thì transaction còn không thể đọc / ghi đè dữ liệu từ một transaction đang tiến hành cập nhật trên bản ghi đó. Query 1:
+
+query 1
+```
+START TRANSACTION;
+    SELECT SLEEP(30);
+    SELECT * FROM `users` WHERE `id` = 2;
+COMMIT;
+```
+query 2
+```
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    UPDATE `users` SET `point`= 100 WHERE 'id' = 2;
+COMMIT;
+```
+#### 5.5 Serializable
+Level cao nhất của Isolation, khi transaction tiến hành thực thi nó sẽ khóa các bản ghi liên quan và sẽ unlock cho tới khi rollback hoặc commit dữ liệu
+query 1
+```
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+START TRANSACTION;
+    SELECT * FROM `users`;
+    SELECT SLEEP(30);
+    SELECT * FROM `users`;
+COMMIT;
+```
+query 2
+```
+ INSERT INTO `users` (`id`, `name`, `point`) VALUES ('3', 'Dat09', '3');
+```
+
+
+Mức isolation này đảm bảo các lệnh đọc trong cùng một transaction cho cùng kết quả, nói cách khác dữ liệu đang được đọc sẽ được bảo vệ khỏi cập nhật bởi các transaction khác. Tuy nhiên nó không bảo vệ được dữ liệu khỏi insert hoặc delete:
+
+#### 6. Connector
+
+#### 6.1 Sử dụng JDBC
+JDBC (Java Database Connectivity) là một API tiêu chuẩn dùng để tương tác với các loại cơ sở dữ liệu quan hệ. JDBC có một tập hợp các class và các Interface dùng cho ứng dụng Java có thể nói chuyện với các cơ sở dữ liệu.
+![img](./images/jdbcs.png)
+<b>DriverManager </b>:
+Là một class, nó dùng để quản lý danh sách các Driver (database drivers). 
+<b>Driver </b>:
+Là một Interface, nó dùng để liên kết các liên lạc với cơ sở dữ liệu, điều khiển các liên lạc với database. Một khi Driver được tải lên, lập trình viên không cần phải gọi nó một cách cụ thể.
+<b>Connection </b>:
+Là một Interface với tất cả các method cho việc liên lạc với database. Nó mô tả nội dung liên lạc. tất cả các thông tin liên lạc với cơ sở dữ liệu là thông qua chỉ có đối tượng Connection.
+<b>Statement </b>:
+Là một Interface, gói gọn một câu lệnh SQL gửi tới cơ sở dữ liệu được phân tích, tổng hợp, lập kế hoạch và thực hiện.
+<b>ResultSet </b>:
+ResultSet đại diện cho tập hợp các bản ghi lấy do thực hiện truy vấn.
