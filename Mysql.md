@@ -177,6 +177,55 @@ select * from class101;
 
 ## 3. Data type
 
+MYSQL hỗ trợ các kiểu dữ liệu: kiểu số, datetime string, đối tương hình học, Json.
+
+### 3.1 Kiểu số
+
+<b>Integer</b>
+![interger](./images/KDdMS.jpg)
+bảng kích thước kiểu dữ liệu integer theo từng loại
+
+<b>DECIMAL, NUMERIC</b>
+DECIMAL and NUMERIC là kiểu dữ liệu được dùng khi muốn thể hiện độ chính xác của số . Ví dụ như lưu giá trị tiền tệ
+```
+salary DECIMAL(5,2)
+```
+
+<b>FLOAT, DOUBLE</b>
+Kiêu dữ liệu FLOAT và DOUBLE thể hiện giá trị gần đúng của dữ liệu số. MYSQL sử dụng 4 byte cho kiểu FLOAT và 8 byte cho DOUBLE.
+
+<b>Bit-Value </b>
+kiểu dữ liệu bit dùng để lưu giá trị các bit
+
+<b>Boolean</b>
+Kiểu boolen có 2 giá trị là 0 với 1.
+
+#### 3.2 Date and Time Types
+<b>DATE</b> − A date in YYYY-MM-DD format, between 1000-01-01 and 9999-12-31. For example, December 30th, 1973 would be stored as 1973-12-30.
+
+<b>DATETIME</b> − A date and time combination in YYYY-MM-DD HH:MM:SS format, between 1000-01-01 00:00:00 and 9999-12-31 23:59:59. For example, 3:30 in the afternoon on December 30th, 1973 would be stored as 1973-12-30 15:30:00.
+
+<b>TIMESTAMP</b> − A timestamp between midnight, January 1st, 1970 and sometime in 2037. This looks like the previous DATETIME format, only without the hyphens between numbers; 3:30 in the afternoon on December 30th, 1973 would be stored as 19731230153000 ( YYYYMMDDHHMMSS ).
+
+<b>TIME</b> − Stores the time in a HH:MM:SS format.
+
+<b>YEAR(M)</b> − Stores a year in a 2-digit or a 4-digit format. If the length is specified as 2 (for example YEAR(2)), YEAR can be between 1970 to 2069 (70 to 69). If the length is specified as 4, then YEAR can be 1901 to 2155. The default length is 4
+
+#### 3.3 String Types
+<b>CHAR(M)</b> − A fixed-length string between 1 and 255 characters in length (for example CHAR(5)), right-padded with spaces to the specified length when stored. Defining a length is not required, but the default is 1.
+
+<b>VARCHAR(M)</b> − A variable-length string between 1 and 255 characters in length. For example, VARCHAR(25). You must define a length when creating a VARCHAR field.
+
+<b>BLOB or TEXT</b> − A field with a maximum length of 65535 characters. BLOBs are "Binary Large Objects" and are used to store large amounts of binary data, such as images or other types of files. Fields defined as TEXT also hold large amounts of data. The difference between the two is that the sorts and comparisons on the stored data are case sensitive on BLOBs and are not case sensitive in TEXT fields. You do not specify a length with BLOB or TEXT.
+
+<b>TINYBLOB or TINYTEXT </b>− A BLOB or TEXT column with a maximum length of 255 characters. You do not specify a length with TINYBLOB or TINYTEXT.
+
+</b>MEDIUMBLOB or MEDIUMTEXT </b>− A BLOB or TEXT column with a maximum length of 16777215 characters. You do not specify a length with MEDIUMBLOB or MEDIUMTEXT.
+
+<b>LONGBLOB or LONGTEXT</b> − A BLOB or TEXT column with a maximum length of 4294967295 characters. You do not specify a length with LONGBLOB or LONGTEXT.
+
+<b>ENUM</b> − An enumeration, which is a fancy term for list. When defining an ENUM, you are creating a list of items from which the value must be selected (or it can be NULL). For example, if you wanted your field to contain "A" or "B" or "C", you would define your ENUM as ENUM ('A', 'B', 'C') and only those values (or NULL) could ever populate that field.
+![stringtypes](./images/MySQL-Data-Types.jpg)
 
 ## 4. Transaction
 #### 4.1 Định nghĩa: 
