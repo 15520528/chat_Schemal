@@ -407,3 +407,106 @@ Là một Interface với tất cả các method cho việc liên lạc với da
 Là một Interface, gói gọn một câu lệnh SQL gửi tới cơ sở dữ liệu được phân tích, tổng hợp, lập kế hoạch và thực hiện.
 <b>ResultSet </b>:
 ResultSet đại diện cho tập hợp các bản ghi lấy do thực hiện truy vấn.
+
+<b>Ví dụ tạo một kết nối tới Mysql</b>
+Tạo một class MysqlConnUtils để tạo kết nới tới Mysql và trả về kết nối. file ConnectionUtils.java để test kết nối
+
+file ConnectionUtils.java
+```
+package jdbc;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class ConnectionUtils {
+    public static Connection getMyConnection() throws SQLException,
+            ClassNotFoundException {
+        // Sử dụng Oracle.
+        // Bạn có thể thay thế bởi Database nào đó.
+        return MySQLConnUtils.getMySQLConnection();
+    }
+    public static void main(String[] args) throws SQLException,
+            ClassNotFoundException {
+
+        System.out.println("Get connection ... ");
+
+        // Lấy ra đối tượng Connection kết nối vào database.
+        Connection conn = ConnectionUtils.getMyConnection();
+
+        System.out.println("Get connection " + conn);
+
+        System.out.println("Done!");
+        Statement statement = conn.createStatement();
+        String sql = "Select id, name, gpa from class101";
+        ResultSet rs = statement.executeQuery(sql);
+        while (rs.next()) {// Di chuyển con trỏ xuống bản ghi kế tiếp.
+            int empId = rs.getInt(1);
+            String empNo = rs.getString(2);
+            String empName = rs.getString(3);
+            System.out.println("--------------------");
+            System.out.println("Id:" + empId);
+            System.out.println("name:" + empNo);
+            System.out.println("gpa:" + empName);
+        }
+        // Đóng kết nối
+        conn.close();
+
+    }
+}
+
+```
+
+file MySQLConnUtils.java
+```
+package jdbc;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+public class MySQLConnUtils {
+    // Kết nối vào MySQL.
+    public static Connection getMySQLConnection() throws SQLException,
+            ClassNotFoundException {
+        String hostName = "localhost";
+
+        String dbName = "studentdb";
+        String userName = "myuser";
+        String password = "123456";
+
+        return getMySQLConnection(hostName, dbName, userName, password);
+    }
+    public static Connection getMySQLConnection(String hostName, String dbName,
+                                                String userName, String password) throws SQLException,
+            ClassNotFoundException {
+        // Khai báo class Driver cho DB MySQL
+        // Việc này cần thiết với Java 5
+        // Java6 tự động tìm kiếm Driver thích hợp.
+        // Nếu bạn dùng Java6, thì ko cần dòng này cũng được.
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        // Cấu trúc URL Connection dành cho Oracle
+        // Ví dụ: jdbc:mysql://localhost:3306/simplehr
+        String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
+
+        Connection conn = DriverManager.getConnection(connectionURL, userName,
+                password);
+        return conn;
+    }
+}
+```
+
+Output
+```
+Get connection ... 
+Get connection com.mysql.cj.jdbc.ConnectionImpl@79b4d0f
+Done!
+--------------------
+Id:22
+name:Mohamed Ali
+gpa:33.9
+--------------------
+Id:0
+name:Peter Jones
+gpa:4.55
+
+```
