@@ -281,11 +281,14 @@ một lock là một flag liên kết với bảng, MYSQL cho phép một phiên
 <b>READ LOCK</b> 
 + một phiên làm việc với table chỉ có thể đọc không thể thay đổi trên table đó.
 + Nhiều session có thể đọc trên một table cùng lúc
+
 ```
 lock table class101 read;
 UPDATE class101 SET gpa = gpa + 1.0 WHERE name = 'Mohamed Ali';
 ```
+
 lúc này lỗi sẽ xuất hiện do table bị read lock, mọi thay đổi trên bảng đều không thực thi.
+
 ```
 Error Code: 1099. Table 'class101' was locked with a READ lock and can't be updated	0,00022 sec
 
