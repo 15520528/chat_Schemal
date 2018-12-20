@@ -63,38 +63,6 @@ Mô tả: Chứa thông tin về ảnh đại diện của user
 | is_deleted | boolean      | Bị xóa hay chưa  |
 | type       | enum         | Loại ảnh         |
 
-Bảng News
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| news_id    | int(11)      | Mã bài viết   |
-| writer_id  | int(11)      | Mã người viết |
-| react_id   | int(11)      | Mã phản hồi   |
-| content    | text         | Nội dung      |
-| is_deleted | boolean      | Tình trạng xóa|
-| created_at | DateTime     | Thời điểm được đăng |
-
-Bảng EmotionReactions
-Mô tả: chứa thông tin về phản hồi về ảnh của người dùng 
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| news_id   | int(11)      | Mã bảng tin    |
-| react_user | int(11)      | Mã người phả hồi |
-| type       | enum         | Loại phản hồi |
-| updated_at | DateTime     | Thời điểm cập nhật |
-
-Bảng CommentsReactions
-Mô tả: chứa thông tin về phản hồi về ảnh của người dùng 
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| comments_id    | int(11)     | Mã comment    |
-| news_id   | int(11)     | Mã photo       |
-| sender_id  | int(11)     | Mã người bình luận   |
-| parentComment_id | int(11) | Mã comment cha |
-| content    | text  | Nội dung | |
-| sticker_id    | int(11)       | Mã sticker được dùng |
-| image_link | varchar(55)   | Đường dẫn tới ảnh |
-| is_deleted | boolean       | Tình trạng bị xóa |
-| created_at | DatimeTime    | Thời điểm được gửi |
 
 Bảng UserStatus
 Mô tả: Chứa thông tin trạng thái được thay đổi bởi người dùng
@@ -126,6 +94,31 @@ Mô tả: chứa thông về cuộc trò chuyện
 | creator_id      | int(11)     | Id user tạo cuộc trò chuyện |
 | deleted_at      | DateTime    | Thời điểm xóa cuộc trò chuyện |
 
+Bảng attachLinks
+Mô tả: chứa đương dẫn được đính kèm trong message
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| link_id | int(11) | Mã đường dẫn |
+| message_id | int(11) | Mã thông điệp |
+| created_at | DateTime     | Thời điểm được thêm |
+
+Bảng attachImages
+Mô tả: chứa ảnh được đính kèm trong message
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| image_id   | int(11)      | Mã ảnh |
+| message_id | int(11)      | Mã thông điệp |
+| created_at | DateTime     | Thời điểm được thêm |
+
+Bảng attachFile
+Mô tả: chứa file được đính kèm trong message
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| file_id   | int(11)      | Mã file |
+| message_id | int(11)      | Mã thông điệp |
+| created_at | DateTime     | Thời điểm được thêm |
+
+
 Bảng Participants
 Mô tả: bảng chứa thông tin chi tiết về những người tham gia cuộc trò chuyện
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
@@ -142,10 +135,9 @@ Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | message_id | int(11)      | Mã thông điệp |
-| sender_id  | int(11)      | Id người gửi  |
-| message    | varchar(255)         | Thông điệp    |
-| attached_links | varchar(255) | Đường dẫn được đính kèm |
-| attached_images| varchar(255) | Đường dẫn hình ảnh được đính kèm | 
+| sender_id  | int(11)      | Mã người gửi  |   
+| parentMessage_id | int(11)| Mã thông điệp cha |
+| message    | varchar(255)         | Thông điệp    | 
 | created_at | DateTime     | Thời điểm tạo |
 | type       | enum         | Loại message  |       
 | sticker_id | int(11) | id của sticker được thêm vào |
@@ -153,19 +145,30 @@ Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi
 | created_at | DateTime     | Thời điểm được gửi |  
 | retrieved_at | DatTime    | Thời điểm thu hồi |
 
-Bảng MessagesMark
+Bảng EmotionReactions
+Mô tả: chứa thông tin về phản hồi về ảnh của người dùng 
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| message_id   | int(11)      | Mã thông điệp |
+| react_user | int(11)      | Mã người phả hồi |
+| type       | enum         | Loại phản hồi |
+| created_at | DateTime     | Thời điểm được tạo |
+| lassUpdated_at | DateTime     | Thời điểm cập nhật lần cuối|
+
+Bảng markMessages
 Mô tả: Bảng chứa các thông điệp được đánh dấu bởi người dùng
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | user_id    | int(11)      | Mã người dùng |
 | message_id | int(11)      | Mã thông điệp |
+| created_at | DateTime     | Thời điểm được tạo |
 
 Bảng stickers
 Mô tả: chứa thông tin về  stickers 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
-| stickers_id    | int(11)      | Mã icon       |
-| content    | varbinary  | Nội dung icon      |
+| stickers_id    | int(11)      | Mã sticker       |
+| content    | varbinary  | Nội dung sticker      |
 | groupSticker_id   | int(11)      | Mã nhóm icon  |
 | created_at | DateTime     | Thời điểm được thêm|
 
