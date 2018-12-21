@@ -1,7 +1,9 @@
 
 ### Mục lục
 [I. Yêu cầu ứng dụng](#I.-Yêu-cầu-ứng-dụng)
+
 [II. Thiết kế cơ sở dữ liệu cho ứng dụng](#II.-Thiết-kế-cơ-sở-dữ-liệu-cho-ứng-dụng)
+
 [III. Truy vấn dữ liệu](#Truy-vấn-dữ-liệu)
 
 ### I. Yêu cầu ứng dụng
@@ -33,6 +35,7 @@ Mô tả chương trình chat: cơ chế tương tự Zalo, Message.
 #### 2.1 Mô hình cơ sở dữ liệu
 
 Bảng Users
+
 Mô tả: chứa thuộc tính của người dùng
 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
@@ -53,6 +56,7 @@ Mô tả: chứa thuộc tính của người dùng
 
 Bảng Photos
 Mô tả: Chứa thông tin về ảnh đại diện của user
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | photo_id   | int(11)      | Mã photo |
@@ -65,6 +69,7 @@ Mô tả: Chứa thông tin về ảnh đại diện của user
 
 
 Bảng UserStatus
+
 Mô tả: Chứa thông tin trạng thái được thay đổi bởi người dùng
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
@@ -75,7 +80,9 @@ Mô tả: Chứa thông tin trạng thái được thay đổi bởi người d�
 
  
 Bảng FriendRelationship
+
 Mô tả: chứa thuộc tính của người dùng
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | user1_id   | int(11)      | Mã người dùng 1|
@@ -84,7 +91,9 @@ Mô tả: chứa thuộc tính của người dùng
 | areFriends | boolean      | Có phải bạn bè  hay không |
 
 Bảng Conversations
+
 Mô tả: chứa thông về cuộc trò chuyện
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | conversation_id | int(11) | Mã cuộc trò chuyện |
@@ -95,7 +104,9 @@ Mô tả: chứa thông về cuộc trò chuyện
 | deleted_at      | DateTime    | Thời điểm xóa cuộc trò chuyện |
 
 Bảng attachLinks
+
 Mô tả: chứa đương dẫn được đính kèm trong message
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | link_id | int(11) | Mã đường dẫn |
@@ -103,7 +114,9 @@ Mô tả: chứa đương dẫn được đính kèm trong message
 | created_at | DateTime     | Thời điểm được thêm |
 
 Bảng attachImages
+
 Mô tả: chứa ảnh được đính kèm trong message
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | image_id   | int(11)      | Mã ảnh |
@@ -111,7 +124,9 @@ Mô tả: chứa ảnh được đính kèm trong message
 | created_at | DateTime     | Thời điểm được thêm |
 
 Bảng attachFile
+
 Mô tả: chứa file được đính kèm trong message
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | file_id   | int(11)      | Mã file |
@@ -120,7 +135,9 @@ Mô tả: chứa file được đính kèm trong message
 
 
 Bảng Participants
+
 Mô tả: bảng chứa thông tin chi tiết về những người tham gia cuộc trò chuyện
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | participant_id | int(11) | Mã participant|
@@ -131,7 +148,9 @@ Mô tả: bảng chứa thông tin chi tiết về những người tham gia cu�
 | lass_accessed   | DateTime    | Lần truy cập cuối |
 
 Bảng Messages
+
 Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi trong messages
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | message_id | int(11)      | Mã thông điệp |
@@ -146,7 +165,9 @@ Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi
 | retrieved_at | DatTime    | Thời điểm thu hồi |
 
 Bảng EmotionReactions
+
 Mô tả: chứa thông tin về phản hồi về ảnh của người dùng 
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | message_id   | int(11)      | Mã thông điệp |
@@ -156,7 +177,9 @@ Mô tả: chứa thông tin về phản hồi về ảnh của người dùng
 | lassUpdated_at | DateTime     | Thời điểm cập nhật lần cuối|
 
 Bảng markMessages
+
 Mô tả: Bảng chứa các thông điệp được đánh dấu bởi người dùng
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | user_id    | int(11)      | Mã người dùng |
@@ -164,7 +187,9 @@ Mô tả: Bảng chứa các thông điệp được đánh dấu bởi người
 | created_at | DateTime     | Thời điểm được tạo |
 
 Bảng stickers
+
 Mô tả: chứa thông tin về  stickers 
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | stickers_id    | int(11)      | Mã sticker       |
@@ -173,7 +198,9 @@ Mô tả: chứa thông tin về  stickers
 | created_at | DateTime     | Thời điểm được thêm|
 
 Bảng groupSticker_id
+
 Mô tả: chứa thông tin về  nhóm
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | groupSticker_id   | int(11)      | Mã nhóm icon  |
@@ -181,14 +208,18 @@ Mô tả: chứa thông tin về  nhóm
 | created_at | DateTime     | Thời điểm được tạo|
 
 Bảng Deleted_Conversations
+
 Mô tả: chưa thông tin những cuộc trò chuyện đã xóa
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | deleted_conversation_id| int(11) | Mã khóa chính |
 | conversation_id | int(11) | Mã cuộc trò chuyện được xóa |
 
 Bảng Sessions
+
 Mô tả: Lưu trữ phiên truy cập của người dùng
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | session_id | int(11) | Mã session |
@@ -200,7 +231,9 @@ Mô tả: Lưu trữ phiên truy cập của người dùng
 | accessed_at| DateTime | Thời điểm truy cập |
 
 Bảng devices
-Mô tả: Lưu trữ thông tin thiết bị
+
+Mô tả: Lưu trữ thông tin thiết bị 
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | device_id  | int(11)      | Mã thiết bị |
@@ -208,7 +241,9 @@ Mô tả: Lưu trữ thông tin thiết bị
 | origin       | enum       | Nhà sản xuất  |
 
 Bảng ErrorReport
+
 Mô tả: Lưu trữ thông tin phản hồi của người dùng
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:| 
 | report_id  | int(11)      | Mã phản hồi   |
