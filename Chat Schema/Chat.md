@@ -71,6 +71,7 @@ Mô tả: Chứa thông tin về ảnh đại diện của user
 Bảng UserStatus
 
 Mô tả: Chứa thông tin trạng thái được thay đổi bởi người dùng
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | status_id  | int(11)      | Mã trạng thái |
