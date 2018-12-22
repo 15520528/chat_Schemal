@@ -32,6 +32,10 @@ Mô tả chương trình chat: cơ chế tương tự Zalo, Message.
 - Thiết kế cấu trúc lưu trữ nội dung tin nhắn 
 
 ### II. Thiết kế cơ sở dữ liệu cho ứng dụng
+
+![chatSchemal](../images/chatSchemal.png)
+
+
 #### 2.1 Mô hình cơ sở dữ liệu
 
 Bảng Users
