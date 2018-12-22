@@ -112,6 +112,7 @@ Mô tả: chứa đương dẫn được đính kèm trong message
 |:----------:|--------------|:-------------:|
 | link_id | int(11) | Mã đường dẫn |
 | message_id | int(11) | Mã thông điệp |
+| link         | varchar(255) | Đường dẫn |
 | created_at | DateTime     | Thời điểm được thêm |
 
 Bảng attachImages
@@ -122,9 +123,10 @@ Mô tả: chứa ảnh được đính kèm trong message
 |:----------:|--------------|:-------------:|
 | image_id   | int(11)      | Mã ảnh |
 | message_id | int(11)      | Mã thông điệp |
+| image | BLOB | Nội dung ảnh |
 | created_at | DateTime     | Thời điểm được thêm |
 
-Bảng attachFile
+Bảng attachFiles
 
 Mô tả: chứa file được đính kèm trong message
 
@@ -132,6 +134,7 @@ Mô tả: chứa file được đính kèm trong message
 |:----------:|--------------|:-------------:|
 | file_id   | int(11)      | Mã file |
 | message_id | int(11)      | Mã thông điệp |
+| file | BLOB | Nội dung file |
 | created_at | DateTime     | Thời điểm được thêm |
 
 
@@ -188,7 +191,7 @@ Mô tả: Bảng chứa các thông điệp được đánh dấu bởi người
 | message_id | int(11)      | Mã thông điệp |
 | created_at | DateTime     | Thời điểm được tạo |
 | deleted_at | DateTime | Thời điểm xóa |
-| is_deleted | Boolean | Đã xóa hay chưa |
+| is_deleted | Boolean | Đã xóa hay chưa
 
 Bảng Stickers
 
@@ -211,6 +214,18 @@ Mô tả: chứa thông tin về  nhóm
 | group_name      | varchar(55)     | Tên nhóm icon |
 | created_at | DateTime     | Thời điểm được tạo|
 
+Bảng GroupStickerRenter
+
+Mô tả: Lưu trữ các groupSticker mà người dùng gắn vào message
+
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| renter_id | int(11) | Mã người sử dụng |
+| groupSticker_id | int(11) | Mã nhóm sticker |
+| created_at | DateTime | Thời điểm lưu |
+| deleted_at | DateTime | Thời điểm gỡ |
+| is_deleted | Boolean | người dùng đã ghỡ hay chưa |
+
 Bảng Deleted_Conversations
 
 Mô tả: chưa thông tin những cuộc trò chuyện đã xóa
@@ -221,6 +236,8 @@ Mô tả: chưa thông tin những cuộc trò chuyện đã xóa
 | conversation_id | int(11) | Mã cuộc trò chuyện được xóa |
 | deletor_id | int(11) | người xóa |
 | created_at | DateTime | Thời điểm xóa |
+
+
 
 Bảng Sessions
 
