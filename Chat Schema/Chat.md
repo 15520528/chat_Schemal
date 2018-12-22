@@ -217,8 +217,9 @@ Mô tả: chưa thông tin những cuộc trò chuyện đã xóa
 |:----------:|--------------|:-------------:|
 | deleted_conversation_id| int(11) | Mã khóa chính |
 | conversation_id | int(11) | Mã cuộc trò chuyện được xóa |
-| user_id | int(11) | người xóa |
+| deletor_id | int(11) | người xóa |
 | created_at | DateTime | Thời điểm xóa |
+
 Bảng Sessions
 
 Mô tả: Lưu trữ phiên truy cập của người dùng
@@ -228,12 +229,22 @@ Mô tả: Lưu trữ phiên truy cập của người dùng
 | session_id | int(11) | Mã session |
 | user_id    | int(11) | Mã người dùng |
 | device_id  | int(11) | Mã thiết bị truy cập |
-| country    | varchar(50)| Quốc gia |
-| city       | varchar(50)| Thành phố |
-| street     | varchar(50)| đường     |
+| location_id | int(11) | Mã vị trí |
 | accessed_at| DateTime | Thời điểm truy cập |
 
-Bảng devices
+Bảng Locations
+
+Mô tả: Lưu trữ vị trí địa lý
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| location_id | int(11) | Mã vị trí |
+| country    | varchar(50) | Quốc gia |
+| city | varchar(50) | Thành phố |
+| street | varchar(255) | đường |
+
+
+
+Bảng Devices
 
 Mô tả: Lưu trữ thông tin thiết bị 
 
