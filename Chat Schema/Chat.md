@@ -48,21 +48,21 @@ Mô tả: chứa thuộc tính của người dùng
 | phone      | varchar(11)  | Số điện thoại |
 | gender     | varchar(1)   | Giới tính     |
 | birthday   | Date         | Ngày sinh     |
-| photo_id| varchar(255) | Mã ảnh đại diện  |
-| album_id | varchar(255) | Mã album |
+| photo_id| int(11) | Mã ảnh đại diện  |
+| album_id | int(11) | Mã album |
 | is_online  | boolean      | Trạng thái online |
 | is_blocked | boolean      | Trạng thái block |
 | created_at | DateTime     | Thời điểm tạo |
 
-Bảng Photos
+Bảng ProfilePhotos
 Mô tả: Chứa thông tin về ảnh đại diện của user
 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | photo_id   | int(11)      | Mã photo |
 | owner_id   | int(11)      | Mã user sở hữu id |
-| link       | varchar(55)  | Đường dẫ đến ảnh |
-| cation     | varchar(255) | Phụ đề cho ảnh   |
+| link       | BLOB  | Nội dung ảnh |
+| cation     | text | Phụ đề cho ảnh   |
 | created_at | DateTime     | Thời điểm tạo    |
 | is_deleted | boolean      | Bị xóa hay chưa  |
 | type       | enum         | Loại ảnh         |
@@ -98,7 +98,7 @@ Mô tả: chứa thông về cuộc trò chuyện
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | conversation_id | int(11) | Mã cuộc trò chuyện |
-| title           | varchar(55) | Tên cuộc trò chuyện |
+| title           | varchar(255) | Tên cuộc trò chuyện |
 | created_at      | DateTime    | Thời gian tạo cuộc trò chuyện |
 | type            | enum        | Loại trò chuyện |
 | creator_id      | int(11)     | Id user tạo cuộc trò chuyện |
@@ -155,7 +155,8 @@ Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | message_id | int(11)      | Mã thông điệp |
-| sender_id  | int(11)      | Mã người gửi  |   
+| sender_id  | int(11)      | Mã người gửi  |
+| conversation_id | int(11) | Mã cuộc trò chuyện |   
 | parentMessage_id | int(11)| Mã thông điệp cha |
 | message    | varchar(255)         | Thông điệp    | 
 | created_at | DateTime     | Thời điểm tạo |
@@ -187,25 +188,25 @@ Mô tả: Bảng chứa các thông điệp được đánh dấu bởi người
 | message_id | int(11)      | Mã thông điệp |
 | created_at | DateTime     | Thời điểm được tạo |
 
-Bảng stickers
+Bảng Stickers
 
 Mô tả: chứa thông tin về  stickers 
 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | stickers_id    | int(11)      | Mã sticker       |
-| content    | varbinary  | Nội dung sticker      |
+| content    | BLOB  | Nội dung sticker      |
 | groupSticker_id   | int(11)      | Mã nhóm icon  |
 | created_at | DateTime     | Thời điểm được thêm|
 
-Bảng groupSticker_id
+Bảng groupSticker
 
 Mô tả: chứa thông tin về  nhóm
 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | groupSticker_id   | int(11)      | Mã nhóm icon  |
-| name      | varchar()     | Tên nhóm icon |
+| group_name      | varchar(55)     | Tên nhóm icon |
 | created_at | DateTime     | Thời điểm được tạo|
 
 Bảng Deleted_Conversations
@@ -216,7 +217,8 @@ Mô tả: chưa thông tin những cuộc trò chuyện đã xóa
 |:----------:|--------------|:-------------:|
 | deleted_conversation_id| int(11) | Mã khóa chính |
 | conversation_id | int(11) | Mã cuộc trò chuyện được xóa |
-
+| user_id | int(11) | người xóa |
+| created_at | DateTime | Thời điểm xóa |
 Bảng Sessions
 
 Mô tả: Lưu trữ phiên truy cập của người dùng
