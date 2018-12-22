@@ -184,9 +184,11 @@ Mô tả: Bảng chứa các thông điệp được đánh dấu bởi người
 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
-| user_id    | int(11)      | Mã người dùng |
+| owner_id    | int(11)      | Mã người dùng |
 | message_id | int(11)      | Mã thông điệp |
 | created_at | DateTime     | Thời điểm được tạo |
+| deleted_at | DateTime | Thời điểm xóa |
+| is_deleted | Boolean | Đã xóa hay chưa |
 
 Bảng Stickers
 
