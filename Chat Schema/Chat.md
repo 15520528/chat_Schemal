@@ -4,7 +4,7 @@
 
 [II. Thiết kế cơ sở dữ liệu cho ứng dụng](#II.-Thiết-kế-cơ-sở-dữ-liệu-cho-ứng-dụng)
 
-[III. Truy vấn dữ liệu](#Truy-vấn-dữ-liệu)
+[III. Truy vấn dữ liệu](#iii-truy-vấn-dữ-liệu)
 
 ### I. Yêu cầu ứng dụng
 Thiết kế schema cho chương trình chat - trò chuyện (với Redis và với MySQL), sử dụng Python để tương tác.
