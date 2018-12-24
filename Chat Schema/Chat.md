@@ -301,3 +301,9 @@ Người A id 2 tạo cuộc trò chuyện với B id = 3
 <b>Hiển thị tin nhắn đã xem của từng thành viên</b>
 
 Có một tin nhắn có message_id = 5, một user a có user_id = 10, muốn check xem A đã xem tin nhắn hay chưa thì chỉ cấn check xem thời điểm truy cập cuối `lass_accessed` của A có lớn hơn thời gian tin nhắn được tạo `created_at`
+
+<b>Gửi một tin nhắn vào nhóm</b>
+
+user A có id = 4 muốn gửi message vào một cuộc trò chuyện có id = 5, với `messages = 'Hello' `
+
+`INSERT INTO Message VALUES(99, 5, 4, 0, 'Hello', 'text', NULL, false, '2018-12-20 03:14:07', NULL)`
