@@ -253,73 +253,51 @@ Mô tả: Lưu trữ thông tin thiết bị
 
 ### III. Truy vấn dữ liệu
 
-### 3.1. Bảng Users 
+<b>Tạo một tài khoản</b>
 
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| user_id    | int(11)          |    Mã user    |
-| user_name  | varchar(25)  | Tên đăng nhập |
-| password   | varchar(40)  | Mật khẩu      |
-| email      | varchar(25)  | Địa chỉ mail  | 
-| full_name  | varchar(55)  | Tên đầy đủ    |
-| phone      | varchar(11)  | Số điện thoại |
-| gender     | varchar(1)   | Giới tính     |
-| birthday   | Date         | Ngày sinh     |
-| photo_id| int(11) | Mã ảnh đại diện  |
-| is_online  | boolean      | Trạng thái online |
-| is_blocked | boolean      | Trạng thái block |
-| created_at | DateTime     | Thời điểm tạo |
+`INSERT INTO Users VALUES(1, 'namvh3', '123', 'namvh109@gmail.com', 'V H N', '099723456', 'M', '12/9/1997', '97', 'true', 'false', '2018-12-20 03:14:07')`
 
-Thêm một user vào bảng
+<b>Hiển thị trạng thái online/offline</b>
 
-`
-INSERT INTO Users VALUES(1, 'namvh3', '123', 'namvh109@gmail.com', 'V H N', '099723456', 'M', '12/9/1997', '97', 'true', 'false', '2018-12-20 03:14:07')
-`
+Hiển thị trạng thái online của A có id = 1
 
-### 3.1. Bảng ProfilePhotos 
-
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| photo_id   | int(11)      | Mã photo |
-| owner_id   | int(11)      | Mã user sở hữu id |
-| link       | BLOB  | Nội dung ảnh |
-| cation     | text | Phụ đề cho ảnh   |
-| created_at | DateTime     | Thời điểm tạo    |
-| is_deleted | boolean      | Bị xóa hay chưa  |
-| deleted at | DateTime | Thời điểm xóa |
+`SELECT is_onlie FROM Users where user_id = 1`
 
 Khi người dung thay đổi ảnh đại diện
 
-`
-INSERT INTO ProtofilePhotos VALUES('97', '1', 'Jonhkery_asdasd.jpg', 'Hôm nay trời đẹp quá ', '2018-12-20 03:14:07', 'false', null)
-`
+`INSERT INTO ProtofilePhotos VALUES('97', '1', 'Jonhkery_asdasd.jpg', 'Hôm nay trời đẹp quá ','2018-12-20 03:14:07', 'false', null)`
 
-### 3.1. Bảng FriendRelationship 
+<b>Kết bạn</b>: 
 
-### 3.1. Bảng Conversations  
+Thêm A có id =1 vào bạn bè của B có id = 2
 
-### 3.1. Bảng attachLinks 
+`INSERT INTO FriendRelationship VALUES(2, 1, 'friend', 'no')`
+`INSERT INTO FriendRelationship VALUES(1, 2, 'friend', 'no')`
 
-### 3.1. Bảng attachImages 
+Nếu B đồng ý kết bạn thì sẽ sửa lại `arefriend ` ở A và B là `yes`
 
-### 3.1. Bảng attachFiles  
+<b>Hiển thị lịch sử trò chuyện </b>
 
-### 3.1. Bảng Participants  
+Hiển thị lịch sử cuộc trò chuyện của user_id = 1
 
-### 3.1. Bảng Messages 
+`SELECT DISTINCT conversation_id from Participants, where user_id = '1'`
 
-### 3.1. Bảng markMessages 
+<b>Chọn người trò chuyện </b>
 
-### 3.1. Bảng Stickers 
+Người A id 2 tạo cuộc trò chuyện với B id = 3
 
-### 3.1. Bảng groupSticker 
++ Tạo cuộc trò chuyện
 
-### 3.1. Bảng GroupStickerRenter 
+`INSERT INTO CONVERSATIONS VALUES (1, "chat", 'couple', 2, 2018-12-20 03:14:07, NULL)`
 
-### 3.1. Bảng Deleted_Conversations 
++ thêm A vào danh sách người tham gia vào cuộc trò chuyện 
 
-### 3.1. Bảng Sessions 
+`INSERT INTO Paticipants VALUES(1, 1, 3, "ốc", false, 2018-12-20 03:14:07`)`
 
-### 3.1. Bảng Locations 
++ thêm B vào danh sách người tham gia vào cuộc trò chuyện 
 
-### 3.1.Bảng Devices 
+`INSERT INTO Paticipants VALUES(1,1, 2, "sò", false, 2018-12-20 03:14:07`); 
+
+<b>Hiển thị tin nhắn đã xem của từng thành viên</b>
+
+Có một tin nhắn có message_id = 5, một user a có user_id = 10, muốn check xem A đã xem tin nhắn hay chưa thì chỉ cấn check xem thời điểm truy cập cuối `lass_accessed` của A có lớn hơn thời gian tin nhắn được tạo `created_at`
