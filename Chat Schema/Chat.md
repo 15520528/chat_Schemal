@@ -33,7 +33,7 @@ Mô tả chương trình chat: cơ chế tương tự Zalo, Message.
 
 ### II. Thiết kế cơ sở dữ liệu cho ứng dụng
 
-![chatSchemal](../images/chatSchemal.png)
+![chatSchemal](../images/chatSchemalfix2.png)
 
 
 #### 2.1 Mô hình cơ sở dữ liệu
@@ -69,19 +69,7 @@ Mô tả: Chứa thông tin về ảnh đại diện của user
 | cation     | text | Phụ đề cho ảnh   |
 | created_at | DateTime     | Thời điểm tạo    |
 | is_deleted | boolean      | Bị xóa hay chưa  |
-| type       | enum         | Loại ảnh         |
-
-
-Bảng UserStatus
-
-Mô tả: Chứa thông tin trạng thái được thay đổi bởi người dùng
-
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| status_id  | int(11)      | Mã trạng thái |
-| user_id     | int(11)      | Mã user       |
-| Update_time | DateTime    | Thời điểm cập nhật|
-| Description | varchar(50) | Mô tả cập nhật |
+| deleted at | DateTime | Thời điểm xóa |
 
  
 Bảng FriendRelationship
@@ -166,24 +154,11 @@ Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi
 | conversation_id | int(11) | Mã cuộc trò chuyện |   
 | parentMessage_id | int(11)| Mã thông điệp cha |
 | message    | varchar(255)         | Thông điệp    | 
-| created_at | DateTime     | Thời điểm tạo |
 | type       | enum         | Loại message  |       
 | sticker_id | int(11) | id của sticker được thêm vào |
 | is_retrived | boolean     | Tình trạng bị thu hồi |
 | created_at | DateTime     | Thời điểm được gửi |  
 | retrieved_at | DatTime    | Thời điểm thu hồi |
-
-Bảng EmotionReactions
-
-Mô tả: chứa thông tin về phản hồi về ảnh của người dùng 
-
-| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:|
-| message_id   | int(11)      | Mã thông điệp |
-| react_user | int(11)      | Mã người phả hồi |
-| type       | enum         | Loại phản hồi |
-| created_at | DateTime     | Thời điểm được tạo |
-| lassUpdated_at | DateTime     | Thời điểm cập nhật lần cuối|
 
 Bảng markMessages
 
@@ -277,18 +252,75 @@ Mô tả: Lưu trữ thông tin thiết bị
 | device_name  | varchar(255)| Tên thiết bị |
 | origin       | enum       | Nhà sản xuất  |
 
-Bảng ErrorReport
+### III. Truy vấn dữ liệu
 
-Mô tả: Lưu trữ thông tin phản hồi của người dùng
+### 3.1. Bảng Users 
 
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
-|:----------:|--------------|:-------------:| 
-| report_id  | int(11)      | Mã phản hồi   |
-| type       | enum         | Loại phản hồi |
-| sender_id  | int(11)      | Mã người gửi  |
-| message    | varchar(500) | Thông điệp    | 
+|:----------:|--------------|:-------------:|
+| user_id    | int(11)          |    Mã user    |
+| user_name  | varchar(25)  | Tên đăng nhập |
+| password   | varchar(40)  | Mật khẩu      |
+| email      | varchar(25)  | Địa chỉ mail  | 
+| full_name  | varchar(55)  | Tên đầy đủ    |
+| phone      | varchar(11)  | Số điện thoại |
+| gender     | varchar(1)   | Giới tính     |
+| birthday   | Date         | Ngày sinh     |
+| photo_id| int(11) | Mã ảnh đại diện  |
+| is_online  | boolean      | Trạng thái online |
+| is_blocked | boolean      | Trạng thái block |
+| created_at | DateTime     | Thời điểm tạo |
 
-#### 2.2 Mô tả dữ liệu các bảng
+Thêm một user vào bảng
 
+`
+INSERT INTO Users VALUES(1, 'namvh3', '123', 'namvh109@gmail.com', 'V H N', '099723456', 'M', '12/9/1997', '97', 'true', 'false', '2018-12-20 03:14:07')
+`
 
-### III. Truy vấn dữ liệu
+### 3.1. Bảng ProfilePhotos 
+
+| **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
+|:----------:|--------------|:-------------:|
+| photo_id   | int(11)      | Mã photo |
+| owner_id   | int(11)      | Mã user sở hữu id |
+| link       | BLOB  | Nội dung ảnh |
+| cation     | text | Phụ đề cho ảnh   |
+| created_at | DateTime     | Thời điểm tạo    |
+| is_deleted | boolean      | Bị xóa hay chưa  |
+| deleted at | DateTime | Thời điểm xóa |
+
+Khi người dung thay đổi ảnh đại diện
+
+`
+INSERT INTO ProtofilePhotos VALUES('97', '1', 'Jonhkery_asdasd.jpg', 'Hôm nay trời đẹp quá ', '2018-12-20 03:14:07', 'false', null)
+`
+
+### 3.1. Bảng FriendRelationship 
+
+### 3.1. Bảng Conversations  
+
+### 3.1. Bảng attachLinks 
+
+### 3.1. Bảng attachImages 
+
+### 3.1. Bảng attachFiles  
+
+### 3.1. Bảng Participants  
+
+### 3.1. Bảng Messages 
+
+### 3.1. Bảng markMessages 
+
+### 3.1. Bảng Stickers 
+
+### 3.1. Bảng groupSticker 
+
+### 3.1. Bảng GroupStickerRenter 
+
+### 3.1. Bảng Deleted_Conversations 
+
+### 3.1. Bảng Sessions 
+
+### 3.1. Bảng Locations 
+
+### 3.1.Bảng Devices 
