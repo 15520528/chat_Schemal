@@ -233,14 +233,13 @@ Mô tả: Lưu trữ phiên truy cập của người dùng
 Bảng Locations
 
 Mô tả: Lưu trữ vị trí địa lý
+
 | **Thuộc tính** | **Kiểu dữ liệu** |   **Diễn giải**   |
 |:----------:|--------------|:-------------:|
 | location_id | int(11) | Mã vị trí |
 | country    | varchar(50) | Quốc gia |
 | city | varchar(50) | Thành phố |
 | street | varchar(255) | đường |
-
-
 
 Bảng Devices
 
