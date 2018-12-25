@@ -96,6 +96,8 @@ Mô tả: chứa thông về cuộc trò chuyện
 | creator_id      | int(11)     | Id user tạo cuộc trò chuyện |
 | deleted_at      | DateTime    | Thời điểm xóa cuộc trò chuyện |
 
+<b>note:</b> thuộc tính type chỉ conversation thuộc loại nào , ví dụ `nhóm, khách hàng, gia đình, crush, friend,...`
+
 Bảng attachLinks
 
 Mô tả: chứa đương dẫn được đính kèm trong message
@@ -106,6 +108,8 @@ Mô tả: chứa đương dẫn được đính kèm trong message
 | message_id | int(11) | Mã thông điệp |
 | link         | varchar(255) | Đường dẫn |
 | created_at | DateTime     | Thời điểm được thêm |
+
+<b>note: </b> link lưu trữ đường dẫn đến ảnh mà được lưu trên disk
 
 Bảng attachImages
 
@@ -159,6 +163,8 @@ Mô tả: bảng chứa thông tin về nội dung thông điệp mà user gửi
 | is_retrived | boolean     | Tình trạng bị thu hồi |
 | created_at | DateTime     | Thời điểm được gửi |  
 | retrieved_at | DatTime    | Thời điểm thu hồi |
+
+note: thuộc tính type có thể là một trong các loại sau `file, text, link, image` 
 
 Bảng markMessages
 
@@ -300,10 +306,46 @@ Người A id 2 tạo cuộc trò chuyện với B id = 3
 
 <b>Hiển thị tin nhắn đã xem của từng thành viên</b>
 
-Có một tin nhắn có message_id = 5, một user a có user_id = 10, muốn check xem A đã xem tin nhắn hay chưa thì chỉ cấn check xem thời điểm truy cập cuối `lass_accessed` của A có lớn hơn thời gian tin nhắn được tạo `created_at`
+Có một tin nhắn có message_id = 5, một user a có user_id = 10, muốn check xem A đã xem tin nhắn hay chưa thì chỉ cấn check xem thời điểm truy cập cuối `lass_accessed` của A trong `Participants` của cuộc hội thoại có lớn hơn thời gian `message` được tạo `created_at`. nếu lớn hơn thì A đã xem tin nhắn.
 
 <b>Gửi một tin nhắn vào nhóm</b>
 
 user A có id = 4 muốn gửi message vào một cuộc trò chuyện có id = 5, với `messages = 'Hello' `
 
 `INSERT INTO Message VALUES(99, 5, 4, 0, 'Hello', 'text', NULL, false, '2018-12-20 03:14:07', NULL)`
+
+<b>Đánh dấu một tin nhắn</b>
+
+Gỉa sử một `message` có id = 4, `user A` có id = 5 muốn đánh dấu tin nhắn này tại thời điểm nào đó.
+
+`INSERT INTO markMessages VALUES (4, 5, '2018-12-20 03:14:07', NULL, false)`
+
+Khi `user A` muốn ghỡ `message ` id =4 thì chỉ cần set `is deleted` bằng true
+
+`Update table markMessages set is_deleted =  true`
+
+### IV. Đánh gía và hướng phát triển
+
+#### 4.1 Đánh giá
+Theo như cá nhân thấy, bản thiết kế đáp ứng được các yêu cầu cơ bản và nâng cao
+
+#### 4.2 Ghi nhận khó khăn
+
++ Khi thiết kế  Bảng `ProfilePhotos`, cá nhân phân vân giữa việc nên lưu trữ ảnh cá nhân của `Users` trên bảng hay là chỉ lưu đường dẫn tới bức ảnh.
+
++ Việc thiết kế Bảng `FriendRelations` đã tối ưu hay chưa, phân vân trong việc chỉ lưu trữ 1 bản ghi quan hệ giữ `user A` với `user B`, hay là lưu trữ 2 bản ghi. 
+
++ Phân vân trong việc chọn kiểu dữ liệu để lưu trữ `message` trong bảng `Message`. Ở trên mình dùng kiêu `varchar(255)` trong khi thực tế người dùng có thể  viết tin nhắn dài hơn rất nhiều. Tuy nhiên mình cũng phân vân là nếu lựa chọn kiểu dữ liệu có range cao hơn thì đồng nghĩa sẽ tốn bộ nhớ, đặc biệt khi hệ thống có quá nhiều user.
+
++ Có nên tạo một bảng `deleted_markMessages` để lưu trữ những tin nhắn đánh dấu đã xóa.
+
++ Liệu bản thiết kế trên có đủ để xây dựng một hệ thống nhắn tin trong thực tế.
+
+#### 4.3 Hướng phát triển
++ Xây dựng thêm Lưu trữ Album cho user
++ Xây dựng thêm Phản hồi báo lỗi cho user
++ Xây dựng thêm nơi lưu trữ các thông báo được gửi đến cho user
++ Xây dựng thêm chức năng đăng tin, bình luận, biểu cảm như facebook
++ Thêm chức năng tag trong tin nhắn
++ Thêm chức năng chặn trong tin nhắn, chặn user như facebook.
++ Xây dựng Nơi lưu trữ các cập nhật trangj thái của user

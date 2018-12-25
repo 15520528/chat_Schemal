@@ -5,6 +5,7 @@ Key-Value store là một hệ thống lưu trữ mà ở đó dữ liệu đư�
 
 Ưu điểm: 
 + Tốc độ truy suất cực kì nhanh
++ Hỗ trợ transactions pub/sub, keys với thời gian có giới hạn.
 
 Nhược điểm: 
 + Kích thước Ram có hạn do đó không thể lưu trữ dữ liệu lớn.
@@ -82,7 +83,70 @@ Ví dụ :
 
 ![pusub](./images/redispubsub.png)
 
-#### 6. Lock
+#### 6. Giao dịch trong redis
+
+- giao dịch trong redis cho phép thực thi một nhóm các truy vấn được thực thi .
+- Redis đảm bảo tại một thời điểm chỉ có một client có thể thực hiện truy vấn lên một lệnh command.
+- <b>Tuy nhiên </b> Redis không hỗ trợ `ROLL BACK` như hệ quản trị cơ sở dữ liệu.
+Các lênh command để thự hiện giao dịch
+```
+DISCARD
+EXEC
+MULTI
+UNWATCH
+WATCH
+```
+
+Sử dụng `MULTI` để bắt đầu một giao dịch trong redis. command này luôn phản hồi lại tín hiệu `OK`. Tại thời điểm này người dùng có thể thực hiện các câu command. Redis sẽ lưu chúng vào Queue, tất cả command sẽ được thự thi sau khi người dùng sử dụng câu lệnh `EXEC`.
+
+```
+lap11105-local@LAP11105:~$ redis-cli
+127.0.0.1:6379> set age 19
+OK
+127.0.0.1:6379> MULTI
+OK
+127.0.0.1:6379> incr foo
+QUEUED
+127.0.0.1:6379> DISCARD
+OK
+127.0.0.1:6379> get foo
+(nil)
+127.0.0.1:6379> clear
+127.0.0.1:6379> get age
+"19"
+127.0.0.1:6379> MULTI
+OK
+127.0.0.1:6379> INCR age
+QUEUED
+127.0.0.1:6379> get age
+QUEUED
+127.0.0.1:6379> EXEC
+1) (integer) 20
+2) "20"
+127.0.0.1:6379> 
+
+```
+
+Sử dụng `DISCARD` để sẽ hủy bỏ transaction. Tất cả bản ghi dù đã bị thay đổi trong transaction đều sẽ trở lại tráng thái ban đầu.
+
+```
+127.0.0.1:6379> get age
+"20"
+127.0.0.1:6379> MULTI
+OK
+127.0.0.1:6379> INCR age
+QUEUED
+127.0.0.1:6379> DISCARD
+OK
+127.0.0.1:6379> get age
+"20"
+127.0.0.1:6379> 
+
+```
+
+Ở phiên bản Redis 2.6.5 Nếu bất kì một command trong giao dịch bị lỗi thì server hủy bỏ transaction đó.
+
+#### 7. Lock
 
 <b>Lock</b>
 Lock là một kỹ thuật đồng bộ nhằm giới hạn số lượng truy cập vào một tài nguyên trong một chương trình tại một thời điểm.

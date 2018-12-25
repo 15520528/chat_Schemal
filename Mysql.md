@@ -205,9 +205,15 @@ Kiêu dữ liệu FLOAT và DOUBLE thể hiện giá trị gần đúng của d�
 
 <b>Bit-Value </b>
 kiểu dữ liệu bit dùng để lưu giá trị các bit
+Khai báo: BIT(M) cho phép lưu trữ chuỗi Bit có độ dài tối đa là M (có giá trị từ 1 đến 64)
 
 <b>Boolean</b>
 Kiểu boolen có 2 giá trị là 0 với 1.
+
+<b>SET </b>
+kiểu dữ liệu tập hợp, chưa các phần tử 
+Ví dụ: SET("Sơn Tùng", "G-Dragon")
+
 
 #### 3.2 Date and Time Types
 <b>DATE</b> − A date in YYYY-MM-DD format, between 1000-01-01 and 9999-12-31. For example, December 30th, 1973 would be stored as 1973-12-30.
@@ -251,7 +257,7 @@ Transaction là một tiến trình xử lý có xác định điểm đầu và
 <b>Durability :</b> transaction cập nhật dữ liệu thành công (commit success) thì phải đảm bảo khi xảy ra sự cố database bị crash, restart lại hệ thống thì dữ liệu vẫn được giữ ở phiên bản mới nhất.
 
 #### 4.2 Tại sao phải sử dụng transaction
-Sử dụng transaction đảm bảo dữ liệu nhất quá.
+Sử dụng transaction đảm bảo dữ liệu nhất quán khi thực hiện giao dịch. Dữ liệu sẽ được bảo vệ nếu thất bại giao dịch.
 
 ### 4.3 Cách sử dụng transaction
 <b>START TRANSACTION, COMMIT, and ROLLBACK Syntax</b>
